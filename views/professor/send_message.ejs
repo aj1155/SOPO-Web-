@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<style>
+@import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #faedce;
+}
+.container {
+   margin: 0 auto;
+   max-width: 1000px;
+}
+
+.container>hr {
+   margin: 40px;
+}
+
+.jumbotron {
+   margin: 0px;
+   text-align: left;
+}
+
+.jumbotron h1 {
+   font-size: 40px;
+   line-height: 1;
+   color: Gray;
+}
+.navbar-inner{
+  font-family:'Hanna';
+  background-image:linear-gradient(rgba(247, 74, 56,0.92), rgba(247, 74, 56,0.92));
+}
+.navbar .brand{
+  color: rgba(0,0,0,.05);
+}
+.navbar .nav>li>a:focus, .navbar .nav>li>a:hover {
+    color: #f89406;
+    font:bold;
+}
+.nav-collapse .nav>li>a, .nav-collapse .dropdown-menu a{
+  color: rgba(0,0,0,.05);
+}
+table.table tr:first-child th { background-color: #eee; vertical-align:middle; text-align:center;}
+.page-header{
+  text-align: center;
+}
+table.table tr td {background-color: white; vertical-align:middle; text-align:center;}
+    .user_image{
+      width:50px;
+      height:50px;
+    }
+</style>
+<script type="text/javascript">
+		$( document ).ready(function() {
+		   var socket = io();
+		   socket.emit('setNickName',<%=user.user_id%>);
+       $('.check-all').click(function(){
+         $('.allc').prop('checked',this.checked);
+       });
+	});
+
+  function gogo2(msg_id){
+    var $room_id=$('<form></form>');
+    $room_id.attr('action','chatting2');
+    $room_id.attr('method','post');
+    var msg=$('<input name="message_id" type="hidden" value='+msg_id+' >');
+    $room_id.append(msg);
+    $room_id.submit();
+  }
+</script>
+</head>
+<body>
+  <div class="container">
+          <div class="jumbotron">
+             <h1>SOPO</h1>
+          </div>
+
+          <hr>
+          <div class="navbar">
+            <div class="navbar-inner">
+              <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                 <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                 <a class="brand" href="/home">SOPO</a>
+                  <div class="nav-collapse collapse">
+                    <ul class="nav">
+                      <li><a href="/professor/main">초기 화면</a></li>
+                      <li><a href="/professor/student_list">학생 목록</a></li>
+                      <li><a href="/professor/send_message">보낸 쪽지함</a></li>
+                    </ul>
+                    <div class="pull-right">
+                    <ul class="nav navbar-nav navbar-right">
+                      <li><a><%=user.name%>님</a></li>
+                      <li><a href="/student/logout" class="btn-xs">로그아웃</a></li>
+                    </ul>
+                  </div>
+                  </div>
+                </div>
+              </div>
+
+<table class="table table-bordered table-hover table-condensed">
+<thead>
+    <tr>
+        <th>사진</th>
+        <th>수신자</th>
+        <th>내용</th>
+        <th>사람수</th>
+       	<th>시간</th>
+      </tr>
+</thead>
+<tbody>
+      <%for(var i=0;i< room.length;++i){ %>
+      <tr style="cursor:pointer;" onclick="gogo2(<%=room[i].message_id%>)">
+        <td><img class="user_image" src="/images/yellow.png"/></td>
+        <td><%=room[i].room_name%></td>
+        <td><%=room[i].last_text%></td>
+        <td><%=room[i].count%></td>
+        <td>
+          <%=room[i].last_time%>
+        <form style="display:inline-block;" class="form-inline" method="post" action="/professor/room_delete?message_id=<%=room[i].message_id%>">
+          <input type="hidden" class="form-control" name="messege_id" value="<%=room[i].message_id%>"></input>
+          <button type="submit" class="btn" onclick="event.cancelBubble = true;">삭제</button>
+        </form>
+      </td>
+      </tr>
+      <% } %>
+</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  $(document).ready(function(){
+      $('.check-all').click(function(){
+        $('.allc').prop('checked',this.checked);
+      });
+      $('a[rel=external-new-window]').click(function(){
+          window.open(this.href, "stuSubject", "width=300, height=400");
+          return false;
+      });
+  });
+
+  function profile(userId){
+    var url="/professor/profile?userId="+userId;
+      window.open(url, "stuProfile", "width=300, height=450");
+      return false;
+  }
+
+  function gogo(){
+        var check_box = document.getElementsByName("check_box");
+        var check_box2 = document.getElementsByName("check_box2");
+        var sf = document.getElementById("sendForm");
+		    var len = check_box.length;
+	    	var count=0;
+        var result = [];
+        var result2 = [];
+        for(var i=0; i<len; i++){
+            if(check_box[i].checked == true){
+                count++;
+                result.push(check_box[i].value);
+                result2.push(check_box2[i].value);
+            }
+        }
+	  	if(count < 1){
+	  	   alert("선택된 학생이 없습니다");
+  		}else if(count == 1 ){
+	  	   sf.action = "chatting";
+	  	}else{
+	  	   sf.action = "chatting";
+	  	}
+	  	 $('#people_id').val(result);
+       $('#people_name').val(result2);
+       sf.submit();
+    }
+</script>
+<style>
+@import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #faedce;
+}
+.container {
+   margin: 0 auto;
+   max-width: 1000px;
+}
+
+.container>hr {
+   margin: 40px;
+}
+
+.jumbotron {
+   margin: 0px;
+   text-align: left;
+}
+
+.jumbotron h1 {
+   font-size: 40px;
+   line-height: 1;
+   color: Gray;
+}
+.navbar-inner{
+  font-family:'Hanna';
+  background-image:linear-gradient(rgba(247, 74, 56,0.92), rgba(247, 74, 56,0.92));
+}
+.navbar .brand{
+  color: rgba(0,0,0,.05);
+}
+.navbar .nav>li>a:focus, .navbar .nav>li>a:hover {
+    color: #f89406;
+    font:bold;
+}
+.nav-collapse .nav>li>a, .nav-collapse .dropdown-menu a{
+  color: rgba(0,0,0,.05);
+}
+select {
+    width: 180px;
+}
+input.form-control{
+  width:180px;
+}
+    table.table tr:first-child th { background-color: #eee; vertical-align:middle; text-align:center;}
+    .page-header{
+      text-align: center;
+    }
+    table.table tr td {background-color: white; vertical-align:middle; text-align:center;}
+</style>
+</head>
+<body>
+  <div class="container">
+          <div class="jumbotron">
+             <h1>SOPO</h1>
+          </div>
+          <hr>
+      <div class="navbar">
+        <div class="navbar-inner">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+             <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+             <a class="brand" href="/home">SOPO</a>
+              <div class="nav-collapse collapse">
+                <ul class="nav">
+                  <li><a href="/professor/main">초기 화면</a></li>
+                  <li><a href="/professor/student_list">학생 목록</a></li>
+                  <li><a href="/professor/send_message">보낸 쪽지함</a></li>
+                </ul>
+                <div class="pull-right">
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a><%=user.name%>님</a></li>
+                  <li><a href="/student/logout" class="btn-xs">로그아웃</a></li>
+                </ul>
+              </div>
+              </div>
+            </div>
+          </div>
+<div id="content">
+<form class="form-inline" action="/professor/student_list" method="post">
+<div class="form-group" style="float:left; margin-right:5px;">
+  <label class="sr-only">학년</label>
+  <select class="form-control" name="grade"/ style="weight:10px;">
+    <option value="--전체--">--전체--</option>
+    <option value="1학년">1학년</option>
+    <option value="2학년">2학년</option>
+    <option value="3학년">3학년</option>
+    <option value="4학년">4학년</option>
+  </select>
+</div>
+<div class="form-group" style="float:left; margin-right:5px;">
+  <label class="sr-only">이름</label>
+  <input type="text" class="form-control" name="name" />
+</div>
+<div class="form-group" style="float:left; margin-right:5px;">
+  <label class="sr-only">재학상태</label>
+  <select class="form-control" name="status"/>
+    <option value="--전체--">--전체--</option>
+    <option value="재학중">재학중</option>
+    <option value="휴학중">휴학중</option>
+  </select>
+</div>
+<div class="form-group" style="float:left; margin-right:5px;">
+  <label class="sr-only">수강과목</label>
+  <select class="form-control" name="subject"/>
+    <option value="--전체--">--전체--</option>
+    <%for(var k=0;k< subjects.length;k++){%>
+      <option value="<%=subjects[k].subject_name%>"><%=subjects[k].subject_name%></option>
+    <%}%>
+  </select>
+</div>
+    <button type="submit" class="btn btn-default">검색</button>
+</form>
+
+<form id="sendForm" method="post">
+<table class="table table-bordered table-hover table-condensed">
+<thead>
+  <tr>
+    <th><input type="checkbox" name="all" class="check-all"></th>
+    <th>사진</th>
+    <th>학년</th>
+    <th>이름</th>
+    <th>재학상태</th>
+    <th>연락처</th>
+    <th>수강중과목</th>
+  </tr>
+</thead>
+    <% for (var i = 0; i < student.length; ++i) { %>
+        <tr style="cursor:pointer;" class="" onclick="profile(<%=student[i].user_id%>)">
+            <td onclick="event.cancelBubble = true;">
+              <input type="checkbox" name="check_box" class="allc" value="<%=student[i].user_id%>">
+              <input type="hidden" name="check_box2" class="allc" value="<%=student[i].name%>">
+            </td>
+            <% if(student[i].image===null){%>
+            <td><img style="width:50px;height:50px;" class="center-block img-circle img-thumbnail img-responsive" src="/images/no_pic.gif"/></td>
+            <%}else{%>
+            <td><img style="width:50px;height:50px;" class="center-block img-circle img-thumbnail img-responsive" src="/images/<%=student[i].image%>"/></td>
+            <%}%>
+            <td><%= student[i].grade %></td>
+            <td><%= student[i].name %></td>
+            <td><%= student[i].status %></td>
+            <td><%=student[i].phone %></td>
+            <td><a href="/professor/subject?userId=<%=student[i].user_id%>" rel="external-new-window" class="accessible-link" style="font-family:'Hanna';">수강중과목</a></td>
+         </tr>
+    <% } %>
+</table>
+  <button type="button" class="btn btn-primary" onclick="gogo()">쪽지보내기</button>
+  <input type="hidden" id="people_id" name="people_id" value="">
+  <input type="hidden" id="people_name" name="people_name" value="">
+</div>
+</form>
+
+</div>
+<div class="footer">
+</div>
+</body>
+</html>

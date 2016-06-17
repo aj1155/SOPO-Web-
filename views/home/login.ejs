@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link
+   href="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css"
+   rel="stylesheet">
+<script
+   src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script
+   src="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script>
+   $(document).ready(function() {
+      $('a[rel=external-new-window]').click(function() {
+         window.open(this.href, "stuSubject", "width=380, height=200");
+         return false;
+      });
+   });
+</script>
+</head>
+<style>
+body {
+   padding-top: 20px;
+   padding-bottom: 20px;
+   background-color: #faedce;
+}
+
+/* 전체 내용을 감쌈 */
+.container {
+   margin: 0 auto;
+   max-width: 1000px;
+}
+
+.container>hr {
+   margin: 40px;
+}
+
+.jumbotron {
+   margin: 0px;
+   text-align: left;
+}
+
+.jumbotron h1 {
+   font-size: 40px;
+   line-height: 1;
+   color: Gray;
+}
+
+form {
+   text-align: left;
+   font-size: 22px;
+   font-family: Arial, Helvetica, sans-serif;
+}
+
+h2 {
+   font-weight: normal;
+   font-variant: small-caps;
+   font-size: 40px;
+   font-family: Arial, Helvetica, sans-serif;
+   text-align: center;
+   color: Gray;
+}
+
+.login input[type=text] {
+   width: 80%;
+   height: 40px;
+   background: transparent;
+   border: 2px solid #fff;
+   border-radius: 2px;
+   font-family: Montserrat;
+   font-size: 16px;
+   font-weight: 400;
+   padding: 4px;
+}
+
+.login input[type=password] {
+   width: 80%;
+   height: 40px;
+   background: transparent;
+   border: 2px solid #fff;
+   border-radius: 2px;
+   font-family: Montserrat;
+   font-size: 16px;
+   font-weight: 400;
+   padding: 4px;
+   margin-top: 10px;
+}
+
+.login button[type=submit] {
+   width: 80%;
+   height: 40px;
+   background: #fff;
+   border: 1px solid #fff;
+   cursor: pointer;
+   border-radius: 2px;
+   color: #a18d6c;
+   font-family: Montserrat;
+   font-size: 16px;
+   font-weight: 400;
+   padding: 4px;
+   margin-top: 10px;
+}
+
+.login button[type=submit]:hover {
+   opacity: 0.8;
+}
+
+.login input[type=text]:focus {
+   outline: none;
+}
+
+.login input[type=password]:focus {
+   outline: none;
+}
+
+.login button[type=submit]:focus {
+   outline: none;
+}
+
+a {
+   color: gray;
+   font-family: Montserrat;
+   font-size: 16px;
+   font-weight: 400;
+
+}
+
+::-webkit-input-placeholder {
+   color: Gray !important;
+}
+
+::-moz-placeholder {
+   color: Gray !important;
+} /* firefox 19+ */
+:-ms-input-placeholder {
+   color: Gray !important;
+} /* ie */
+</style>
+<body>
+   <div class="container">
+      <!-- Jumbotron -->
+      <div class="jumbotron">
+         <h1>SOPO</h1>
+      </div>
+
+      <hr>
+
+      <div class="row-fluid">
+         <div class="span2"></div>
+         <div class="span5">
+            <img id="img_postbox" src="/images/postbox.png" width="300"
+               height="400">
+         </div>
+         <div class="span5">
+            <div class="row">
+               <div class="span5"></div>
+            </div>
+            <div class="row">
+               <div class="span5"></div>
+            </div>
+            <div class="row">
+               <div class="span5"></div>
+            </div>
+
+            <div class="login">
+               <form action="/professor/login" method="post">
+                  <input type="text" placeholder="아이디" name="user_id"><br>
+                  <input type="password" placeholder="비밀번호" name="password"><br>
+                  <button type="submit" class="btn btn-primary">로그인</button>
+               </form>
+            </div>
+            &nbsp;&nbsp;&nbsp; <a href="/home/join_user" >회원가입</a>  &nbsp;&nbsp;&nbsp;
+            <a href="/home/password_search"  rel="external-new-window">비밀번호찾기</a>
+         </div>
+      </div>
+      <div class="row-fluid">
+         <div class="span6 offset1">
+            <h2>Software Post Office</h2>
+         </div>
+      </div>
+
+      <hr>
+
+      <div class="footer">
+         <p>&copy; 3416</p>
+      </div>
+
+   </div>
+   <!-- /container -->
+</body>
+</html>

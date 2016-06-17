@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<style>
+@import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
+  body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #faedce;
+  }
+  .container {
+     margin: 0 auto;
+     max-width: 1000px;
+  }
+
+  .container>hr {
+     margin: 40px;
+  }
+
+  .jumbotron {
+     margin: 0px;
+     text-align: left;
+  }
+
+  .jumbotron h1 {
+     font-size: 40px;
+     line-height: 1;
+     color: Gray;
+  }
+  .navbar-inner{
+    font-family:'Hanna';
+    background-image:linear-gradient(rgba(247, 74, 56,0.92), rgba(247, 74, 56,0.92));
+  }
+  .navbar .brand{
+    color: rgba(0,0,0,.05);
+  }
+  .navbar .nav>li>a:focus, .navbar .nav>li>a:hover {
+      color: #f89406;
+      font:bold;
+  }
+  .nav-collapse .nav>li>a, .nav-collapse .dropdown-menu a{
+    color: rgba(0,0,0,.05);
+  }
+        .label, .badge {
+          position:absolute;
+          top: 2px;
+          left: 174px;
+          background-color: #5F755F;
+        }
+    table.table tr:first-child td { background-color: #eee; }
+    .page-header{
+      text-align: center;
+    }
+    table.table tr:first-child th { background-color: #eee; }
+      .page-header{
+        text-align: center;
+      }
+</style>
+<script type="text/javascript">
+		$( document ).ready(function() {
+		   var socket = io();
+		   socket.emit('setNickName',<%=nickName%>);
+		  socket.on('쪽지',function(data,sender){
+	            console.log(data);
+	            $('.chat-messages').append('<p>'+sender+":"+ data + '</p>');
+	            $('.chat-messages').show();
+         });
+	});
+</script>
+</head>
+<body>
+ <div class="container">
+   <div class="jumbotron">
+     <h1>SOPO</h1>
+   </div>
+   <hr>
+      <div class="navbar">
+        <div class="navbar-inner">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+             <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+             <a class="brand" href="/home">SOPO</a>
+              <div class="nav-collapse collapse">
+                <ul class="nav">
+                  <li><a href="/student/main">초기 화면</a></li>
+                  <li>
+                    <a href="/student/message_list">받은 쪽지함</a>
+                  </li>
+                  <li>
+                     <% if(no_read!==0){%>
+                       <a href="/student/message_list" style="color:red;"><span class="badge"><%=no_read%></span></a>
+                     <%}%>
+                   </li>
+                </ul>
+                <div class="pull-right">
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a><%=user.user_id%>&nbsp;/&nbsp;<%=user.name%></a></li>
+                  <li><a href="/student/logout" class="btn-xs">로그아웃</a></li>
+                </ul>
+              </div>
+              </div>
+            </div>
+        </div>
+         <div class="chat-messages">
+         </div>
+    <div id=content>
+    </div>
+    <div class="footer">
+    </div>
+</body>
+</html>

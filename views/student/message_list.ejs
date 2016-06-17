@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<link rel="stylesheet" href="./stylesheets/main.css">
+<style>
+@import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #faedce;
+}
+.container {
+   margin: 0 auto;
+   max-width: 1000px;
+}
+
+.container>hr {
+   margin: 40px;
+}
+
+.jumbotron {
+   margin: 0px;
+   text-align: left;
+}
+
+.jumbotron h1 {
+   font-size: 40px;
+   line-height: 1;
+   color: Gray;
+}
+.navbar-inner{
+  font-family:'Hanna';
+  background-image:linear-gradient(rgba(247, 74, 56,0.92), rgba(247, 74, 56,0.92));
+}
+.navbar .brand{
+  color: rgba(0,0,0,.05);
+}
+.navbar .nav>li>a:focus, .navbar .nav>li>a:hover {
+    color: #f89406;
+    font:bold;
+}
+.nav-collapse .nav>li>a, .nav-collapse .dropdown-menu a{
+  color: rgba(0,0,0,.05);
+}
+      .label, .badge {
+        position:absolute;
+        top: 2px;
+        left: 174px;
+        background-color: #5F755F;
+}
+table.table tr:first-child th { background-color: #eee; vertical-align:middle; text-align:center;}
+.page-header{
+  text-align: center;
+}
+table.table tr td {background-color: white; vertical-align:middle; text-align:center;}
+    .user_image{
+      width:50px;
+      height:50px;
+    }
+    .chat-messages{
+    	font-size:8px;
+    	margin-left:800px;
+    	margin-top:400px;
+    	width:200px;
+    	height:200px;
+    };
+</style>
+<script type="text/javascript">
+		$( document ).ready(function() {
+		   var socket = io();
+		   socket.emit('setNickName',<%=nickName%>);
+		  socket.on('쪽지',function(data,sender){
+	            console.log(data);
+	            $('.chat-messages').append('<p>'+sender+":"+ data + '</p>');
+	            $('.chat-messages').show();
+         });
+	});
+  function check(msg_id){
+    var $room_id=$('<form></form>');
+    $room_id.attr('action','check');
+    $room_id.attr('method','post');
+    var msg=$('<input name="message_id" type="hidden" value='+msg_id+' >');
+    $room_id.append(msg);
+    $room_id.submit();
+  };
+</script>
+</head>
+<body>
+  <div class="container">
+      <div class="jumbotron">
+        <h1>SOPO</h1>
+      </div>
+      <hr>
+          <div class="navbar">
+            <div class="navbar-inner">
+              <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                 <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                 <a class="brand" href="/home">SOPO</a>
+                  <div class="nav-collapse collapse">
+                    <ul class="nav">
+                      <li><a href="/student/main">초기 화면</a></li>
+                      <li>
+                        <a href="/student/message_list">받은 쪽지함</a>
+                      </li>
+                     <li>
+                        <% if(no_read!==0){%>
+                          <a href="/student/message_list" style="color:red;"><span class="badge"><%=no_read%></span></a>
+                        <%}%>
+                      </li>
+                    </ul>
+                    <div class="pull-right">
+                    <ul class="nav navbar-nav navbar-right">
+                      <li><a><%=user.user_id%>&nbsp;/&nbsp;<%=user.name%></a></li>
+                      <li><a href="/student/logout" class="btn-xs">로그아웃</a></li>
+                    </ul>
+                  </div>
+                  </div>
+                </div>
+              </div>
+              <table class="table table-bordered table-hover table-condensed">
+              <thead>
+                  <tr>
+                      <th>사진</th>
+                      <th>발신자</th>
+                      <th>내용</th>
+                      <th>안읽음</th>
+                     	<th>보낸시간</th>
+                    </tr>
+              </thead>
+              <tbody>
+                    <%for(var i=0;i< room.length;++i){ %>
+                    <tr style="cursor:pointer;" onclick="check(<%=room[i].message_id%>)">
+                      <td><img class="user_image" src="/images/yellow.png"/></td>
+                      <td><%=room[i].sender%></td>
+                      <td><%=room[i].last_text%></td>
+                      <%if(room[i].no_check>0){%>
+                        <td style="color:red;"><%=no_read%></td>
+                      <%}else{%>
+                        <td style="color:black;"><%=room[i].no_check%></td>
+                      <%}%>
+                      <td><%=room[i].last_time%></td>
+                    </tr>
+                    <% } %>
+              </tbody>
+              </table>
+         <div class="chat-messages">
+         </div>
+</body>
+</html>

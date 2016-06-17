@@ -1,0 +1,189 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<style>
+@import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #faedce;
+}
+.container {
+   margin: 0 auto;
+   max-width: 1000px;
+}
+
+.container>hr {
+   margin: 40px;
+}
+
+.jumbotron {
+   margin: 0px;
+   text-align: left;
+}
+
+.jumbotron h1 {
+   font-size: 40px;
+   line-height: 1;
+   color: Gray;
+}
+.navbar-inner{
+  font-family:'Hanna';
+  background-image:linear-gradient(rgba(247, 74, 56,0.92), rgba(247, 74, 56,0.92));
+}
+.navbar .brand{
+  color: rgba(0,0,0,.05);
+}
+.navbar .nav>li>a:focus, .navbar .nav>li>a:hover {
+    color: #f89406;
+    font:bold;
+}
+.nav-collapse .nav>li>a, .nav-collapse .dropdown-menu a{
+  color: rgba(0,0,0,.05);
+}
+.message_box{
+  padding:15px;
+  background-color:white;
+  height:450px;
+  border:1px solid #dddddd;
+}
+.message{
+  height:220px;
+  overflow:scroll;
+}
+#msg{
+  float:left;
+  height:70px;
+  width:820px;
+  margin-right:20px;
+}
+.btn{
+  height:70px;
+  width:70px;
+}
+.tb{
+    border: 1px #ddd solid;
+    width: 300px;
+    height:55px;
+    border-radius: 30px;
+    background-color: #F3E918;
+    text-align: center;
+    vertical-align: :middle;
+    float:left;
+    padding:10px;
+}
+</style>
+<link rel="stylesheet" href="./stylesheets/main.css">
+<script>
+$(function() {
+   var socket = io();
+   socket.emit('setNickName',<%=user.user_id%>);
+  var f = document.getElementById("myform1");
+   $('.btn').click(function(){
+        var now = new Date();
+        var hour;
+        var minute;
+        if(now.getHours()<10){
+          hour="0"+now.getHours();
+        }
+        else{
+          hour=now.getHours();
+        }
+        if(now.getMinutes()<10){
+          minute="0"+now.getMinutes();
+        }else{
+          minute=now.getMinutes();
+        }
+        var nowAll = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + hour + ":" + minute;
+       <%for(var m=0;m<len;m++){%>
+           socket.emit('letter',<%=student_id[m]%>,$('.Sender').text(),<%=seq%>,<%=msg_id%>,$('#msg').val(),nowAll);
+       <%}%>
+        socket.emit('success',<%=msg_id%>,<%=len%>);
+        socket.on('완료',function(){
+          $('#msg').val('');
+          alert('정상적으로 메시지를 전달했습니다');
+          f.submit();
+          return false;
+        });
+      });
+      $('a[rel=external-new-window]').click(function(){
+          window.open(this.href, "stuSubject", "width=300, height=400");
+          return false;
+      });
+       $("#msgbox").keyup(function(event) {
+            if (event.which == 13) {
+                socket.emit('send_msg',{to:$('#to').val(),msg:$('#msgbox').val()});
+                $('#msgbox').val('');
+            }
+        });
+});
+</script>
+</head>
+<body>
+     <div class="container">
+          <div class="jumbotron">
+            <h1>SOPO</h1>
+          </div>
+          <hr>
+          <div class="navbar">
+            <div class="navbar-inner">
+              <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                 <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                 <a class="brand" href="/home">SOPO</a>
+                  <div class="nav-collapse collapse">
+                    <ul class="nav">
+                      <li><a href="/professor/main">초기 화면</a></li>
+                      <li><a href="/professor/student_list">학생 목록</a></li>
+                      <li><a href="/professor/send_message">보낸 쪽지함</a></li>
+                    </ul>
+                    <div class="pull-right">
+                    <ul class="nav navbar-nav navbar-right">
+                      <li><a><%=user.name%>님</a></li>
+                      <li><a href="/student/logout" class="btn-xs">로그아웃</a></li>
+                    </ul>
+                  </div>
+                  </div>
+                </div>
+              </div>
+    <div class="message_box">
+    <form id="myform1" name="info" method="post" action="/professor/chatting2">
+      <div class="chat">
+          <div class="send">보낸사람:<span class="Sender"><%=user.name%></span> </div>
+              <div>받는사람:
+                <%for(var k=0; k< len; k++){%>
+                <span class="id"><%=student_id[k]%>/</span><span class="name"><%=student_name[k]%></span>&nbsp;
+                <%}%>
+              </div>
+              <hr>
+              <div class="message">
+                <%for(var j=0;j < list.length;j++){%>
+                  <div style="text-align:left; height:85px;">
+                    <td><img style="width:75px;height:75px; float:left;" class="center-block img-circle img-thumbnail img-responsive" src="/images/<%=user.image%>"/></td>
+                <div class="tb" style="float:left;">
+                  <span><%=list[j].text%></span>
+                </div>
+                <div class="sub">
+                </br>
+                &nbsp;&nbsp;<a href="/professor/no_check?seq=<%=no_check[j].seq%>" rel="external-new-window" class="accessible-link"><%=no_check[j].count%></a></br>
+                &nbsp;&nbsp;<span><%=list[j].time%></span>
+                  </br>
+                </div>
+                </div>
+                <%}%>
+              </div>
+              <hr>
+              <textarea id ="msg" placeholder="여기에 입력해주세요"></textarea>
+              <input type="hidden" name="message_id" value="<%=msg_id%>">
+            </div>
+      <a class="btn">보내기</a>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<style>
+    body {
+       padding-top: 20px;
+       padding-bottom: 20px;
+       background-color: #faedce;
+    }
+
+    /* 전체 내용을 감쌈 */
+    .container {
+       margin: 0 auto;
+       max-width: 1000px;
+    }
+
+    .container>hr {
+       margin: 40px;
+    }
+
+    .jumbotron {
+       margin: 0px;
+       text-align: left;
+    }
+
+    .jumbotron h1 {
+       font-size: 40px;
+       line-height: 1;
+       color: Gray;
+    }
+
+    form {
+       text-align: left;
+       font-size: 22px;
+       font-family: Arial, Helvetica, sans-serif;
+    }
+    h2 {
+       font-weight: normal;
+       font-variant: small-caps;
+       font-size: 40px;
+       font-family: Arial, Helvetica, sans-serif;
+       text-align: center;
+       color: Gray;
+    }
+
+    .login input[type=text] {
+       width: 210px;
+       height: 20px;
+       background: white;
+       border: 1px solid #cccccc;
+       border-radius: 2px;
+       font-family: Montserrat;
+       font-size: 16px;
+       font-weight: 200;
+       padding: 4px;
+       margin-top: 10px;
+    }
+
+    div.form-group{
+      margin-top: 10px;
+    }
+    .login input[type=password] {
+       width: 210px;
+       height: 20px;
+       background: white;
+       border: 1px solid #cccccc;
+       border-radius: 2px;
+       font-family: Montserrat;
+       font-size: 16px;
+       font-weight: 200;
+       padding: 4px;
+    }
+
+
+    .login input[type=text]:focus {
+       outline: none;
+    }
+
+    .login input[type=password]:focus {
+       outline: none;
+    }
+    #front{
+       width: 80px;
+       height: 40px;
+       background: #fff;
+       border: 1px solid #fff;
+       cursor: pointer;
+       border-radius: 2px;
+       color: #a18d6c;
+       font-family: Montserrat;
+       font-size: 16px;
+       font-weight: 100;
+       padding: 4px;
+    }
+
+    #front:hover {
+       opacity: 0.8;
+    }
+
+    #front:focus {
+      outline: none;
+    }
+    #front2 {
+      vertical-align: middle;
+       width: 80px;
+       height: 30px;
+       background:  #cccccc;
+       border: 1px solid #fff;
+       cursor: pointer;
+       border-radius: 2px;
+       color: white;
+       font-family: Montserrat;
+       font-size: 16px;
+       font-weight: 100;
+       padding: 4px;
+    }
+    label{
+      width:80px;
+      text-align: center;
+      font-family: Montserrat;
+    }
+    #front2 {
+       opacity: 0.8;
+    }
+
+    ::-webkit-input-placeholder {
+       color: Gray !important;
+    }
+
+    ::-moz-placeholder {
+       color: Gray !important;
+    } /* firefox 19+ */
+    :-ms-input-placeholder {
+       color: Gray !important;
+    } /* ie */
+
+</style>
+</head>
+<body>
+<div class="container">
+      <!-- Jumbotron -->
+      <div class="jumbotron">
+         <h1>SOPO</h1>
+      </div>
+      <hr>
+            <div class="row-fluid">
+               <div class="span2"></div>
+               <div class="span5">
+                  <img id="img_postbox" src="/images/postbox.png" width="300"
+                     height="400">
+               </div>
+               <div class="span5">
+                  <div class="login">
+                     <form class="form-inline" method="post">
+                       <br/>
+                        <div class="form-group">
+                          <label>아이디(학번)</label>
+                          <input type="text" name="user_id" />
+                      </div>
+                      <div class="form-group">
+                          <label>비밀번호</label>
+                          <input type="password" name="password" />
+                      </div>
+                      <div class="form-group">
+                          <label>학년</label>
+                          <select name="grade"/>
+                            <option value="--선택--">--선택--</option>
+                            <option value="1학년">1학년</option>
+                            <option value="2학년">2학년</option>
+                            <option value="3학년">3학년</option>
+                            <option value="4학년">4학년</option>
+                            <option value="해당없음">해당사항없음</option>
+                          </select>
+                      </div>
+                      <div class="form-group">
+                          <label>이름</label>
+                          <input type="text" name="name" />
+                      </div>
+                      <div class="form-group">
+                          <label>연락처</label>
+                          <input type="text" name="phone" />
+                      </div>
+                      <div class="form-group">
+                          <label>이메일</label>
+                          <input type="text" name="email" />
+                      </div>
+                      <div class="form-group">
+                        <label>재학상태</label>
+                        <select name="status"/>
+                          <option value="--선택--">--선택--</option>
+                          <option value="재학중">재학중</option>
+                          <option value="휴학중">휴학중</option>
+                          <option value="해당없음">해당사항없음</option>
+                        </select>
+                      </div>
+                          <br />
+                  </div>
+               </div>
+            </div>
+             <div class="row-fluid">
+               <div>
+                 <h2 style="float:left; margin-left:140px; margin-right:170px;">Software Post Office</h2>
+                 <button type="submit" class="btn btn-primary" id="front">가입</button>
+                 <a href="/home" class="btn" id="front2">첫화면</a>
+               </div>
+             </div>
+         </form>
+            <hr>
+            <div class="footer">
+               <p>&copy; 3416</p>
+            </div>
+
+</div>
+</body>
+</html>
