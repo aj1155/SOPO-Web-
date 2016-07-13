@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
   if(!req.user){
     res.render('./home/login');
   }else if(req.user.special===1){
-    res.redirect('/professor/main');
+    res.redirect('/professor/main');0
   }else if(req.user.special===0){
     res.redirect('student/main');
   }

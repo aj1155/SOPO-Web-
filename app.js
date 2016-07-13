@@ -1,12 +1,12 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+var logger = require('morgan');//웹브라우저 모든 요청을 로그 기록으로 기록하는 미들웨어
 var session = require('express-session');
 var flash = require('connect-flash');
-var bodyParser = require('body-parser');
+var bodyParser = require('body-parser');//웹브라우저의 요청에 담겨 전송되는 데이터 request parameter를 파싱하는 미들웨어
 var cookieParser = require('cookie-parser');
-var methodOverride=require('method-override');
+var methodOverride=require('method-override'); // 대부분은 보안상 문제로 form method를 post를 제외한 차단을하여 delete나 put
 
 var RedisStore = require('connect-redis')(session);
 var pub = require('redis').createClient(6379,'127.0.0.1');
@@ -134,7 +134,7 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+app.use(logger('dev')); // 웹브라우저의 모든요청을 콘솔창에 찍음
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -159,7 +159,8 @@ var passport = require('./config/passport');
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));  // express.static 정적파일을 처리하는 미들웨어
+//path.join 은 경로명을 생성해서 리턴하는 메소드
 
 app.use('/home', home);
 app.use('/professor', professor);

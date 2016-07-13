@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var bodyParser = require('body-parser');
+var bodyParser = require('body-parser'); // post를 담당하는 미들웨어 request에 body를 붙여주는 역활
 var fs = require('fs');
 
-var multipart = require('connect-multiparty');
+var multipart = require('connect-multiparty'); // 일반 필드와 파일데이터를 모두 받을때
 var multipartMiddleware=multipart();
 
 var passport = require('../config/passport');
